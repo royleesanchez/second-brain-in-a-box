@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "second-brain",
+  "description": "Second Brain in a Box — stand up a personal or team AI second brain with a real memory architecture, in one command.",
+  "owner": {
+    "name": "Second Brain in a Box contributors"
+  },
+  "plugins": [
+    {
+      "name": "second-brain",
+      "description": "Installs and maintains a 4-layer AI second brain: an always-loaded operating manual, a global map, per-entity anchors, and per-project detail — plus the hooks that keep them current and the skills that grow them.",
+      "category": "productivity",
+      "source": "./plugins/second-brain"
+    }
+  ]
+}

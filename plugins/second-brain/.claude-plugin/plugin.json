@@ -1,0 +1,13 @@
+{
+  "name": "second-brain",
+  "description": "Installs and maintains a 4-layer AI second brain: an always-loaded operating manual, a global map, per-entity anchors, and per-project detail — plus the hooks that keep them current and the skills that grow them.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "second-brain",
+    "memory",
+    "obsidian",
+    "knowledge-management",
+    "onboarding"
+  ]
+}
