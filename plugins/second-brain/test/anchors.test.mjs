@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { buildAnchorIndex, matchAnchors } from '../lib/anchors.mjs';
+import { buildAnchorIndex, matchAnchors, expandAliases } from '../lib/anchors.mjs';
+import { tokenize } from '../lib/tokens.mjs';
 
 function fixture(names) {
   const dir = mkdtempSync(path.join(tmpdir(), 'sb-mem-'));
@@ -73,6 +74,24 @@ test('results are capped at maxAnchors', () => {
 test('a missing or unreadable memory dir yields an empty index, not a throw', () => {
   assert.equal(buildAnchorIndex(null).size, 0);
   assert.equal(buildAnchorIndex('/definitely/not/a/real/dir').size, 0);
+});
+
+test('expandAliases rescues a prompt that is otherwise all stopwords', () => {
+  // Regression: the substance gate must run on the EXPANDED prompt. Raw, this
+  // has one token and would be discarded as chit-chat before the alias could
+  // turn it into a direct anchor hit.
+  const prompt = 'give me the latest on nw please';
+  assert.ok(tokenize(prompt).length < 2, 'precondition: raw prompt looks like chit-chat');
+
+  const expanded = expandAliases(prompt, { nw: 'northwind' });
+  assert.ok(tokenize(expanded).length >= 2, 'expansion makes it substantive');
+  assert.ok(expanded.includes('northwind'));
+});
+
+test('expandAliases is case-insensitive and tolerates no aliases', () => {
+  assert.ok(expandAliases('What about NW today', { nw: 'northwind' }).includes('northwind'));
+  assert.equal(expandAliases('plain prompt'), 'plain prompt');
+  assert.equal(expandAliases(null), '');
 });
 
 test('ranking is deterministic for equal scores', () => {

@@ -50,15 +50,26 @@ export function buildAnchorIndex(memDir, opts = {}) {
   return index;
 }
 
-/** Rank anchors by how many distinctive tokens of the prompt they hit. */
-export function matchAnchors(prompt, index, opts = {}) {
-  const aliases = opts.aliases ?? {};
-  const maxAnchors = opts.maxAnchors ?? DEFAULT_MAX_ANCHORS;
-
+/**
+ * Append the expansion of any alias found in the prompt.
+ *
+ * Exported because callers must expand BEFORE deciding whether a prompt is
+ * substantive enough to look up. "what's up with nw" tokenizes to a single
+ * token and would be discarded as chit-chat, even though the alias makes it
+ * a direct hit on an anchor.
+ */
+export function expandAliases(prompt, aliases = {}) {
   let p = String(prompt ?? '').toLowerCase();
   for (const [alias, target] of Object.entries(aliases)) {
-    if (p.includes(alias)) p += ' ' + target;
+    if (p.includes(String(alias).toLowerCase())) p += ' ' + target;
   }
+  return p;
+}
+
+/** Rank anchors by how many distinctive tokens of the prompt they hit. */
+export function matchAnchors(prompt, index, opts = {}) {
+  const maxAnchors = opts.maxAnchors ?? DEFAULT_MAX_ANCHORS;
+  const p = expandAliases(prompt, opts.aliases ?? {});
 
   const scores = new Map();
   for (const t of new Set(tokenize(p))) {
