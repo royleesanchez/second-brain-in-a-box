@@ -1,0 +1,22 @@
+# Shell scripts and hook entrypoints MUST stay LF, on every platform.
+# A CRLF shebang ("#!/usr/bin/env bash\r") is a "bad interpreter" error, and
+# the hooks would fail silently on Windows -- the platform most likely to
+# check them out. This is not cosmetic.
+*.sh            text eol=lf
+install.sh      text eol=lf
+
+# Extensionless hook scripts (bash, invoked via run-hook.cmd)
+hooks/session-start        text eol=lf
+hooks/user-prompt-submit   text eol=lf
+hooks/pre-compact          text eol=lf
+hooks/session-end          text eol=lf
+
+# The polyglot wrapper is parsed by BOTH cmd.exe and bash. cmd.exe tolerates
+# LF, bash does not tolerate CRLF, so LF is the only setting that works.
+*.cmd           text eol=lf
+
+# PowerShell is happy with either; CRLF is the platform-native choice.
+*.ps1           text eol=crlf
+
+# Everything else: normalize in the repo, let Git pick on checkout.
+*               text=auto
