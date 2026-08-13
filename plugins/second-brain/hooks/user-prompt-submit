@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Forward the hook payload to the recall engine.
+#
+# Silent and non-blocking by construction: if Node is missing, if the engine
+# throws, or if anything else goes wrong, the prompt proceeds unchanged. A
+# brain that occasionally forgets to inject context is an inconvenience; a
+# hook that blocks prompts is a broken product.
+PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+command -v node >/dev/null 2>&1 || exit 0
+
+node --no-warnings "${PLUGIN_ROOT}/bin/recall.mjs" 2>/dev/null || true
+exit 0

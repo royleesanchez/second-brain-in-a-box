@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Primes the Memory Operating Protocol at the top of every session.
+#
+# Pure echo: ZERO dependencies. This still works when Node is missing, when
+# the recall engine is broken, and on a machine that has nothing installed
+# but bash -- which is exactly when a reminder to load the anchors matters
+# most, because nothing else is going to do it.
+cat <<'JSON'
+{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"Memory Operating Protocol is active for this brain. LOAD FIRST: before acting on any company, project, or initiative, open its project_*.md anchor file in your memory directory to resume with full context; never start cold on something that has a file. UPDATE ON CHANGE: at the end of any substantive work, update that anchor (Current State + a new dated Log entry + Open Items + Key Artifacts) and refresh its one-line hook in MEMORY.md. Keep dated, decaying detail OUT of CLAUDE.md and MEMORY.md -- those load every session; write a pointer instead."}}
+JSON
+exit 0

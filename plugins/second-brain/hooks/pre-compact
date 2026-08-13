@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Context is about to be summarized away. Flush memory to disk FIRST.
+#
+# Pure echo: zero dependencies, same reasoning as session-start.
+cat <<'JSON'
+{"hookSpecificOutput":{"hookEventName":"PreCompact","additionalContext":"Context is about to compact. Per the Memory Operating Protocol: BEFORE compacting, for every project whose state changed this session, update its project_*.md anchor (Current State + a dated Log entry + Open Items + Key Artifacts, including in-flight file paths and the exact command needed to resume) and refresh its line in MEMORY.md. Anything not written to the anchor now is lost when this context is summarized."}}
+JSON
+exit 0
