@@ -3,3 +3,8 @@ dist/
 *.zip
 .DS_Store
 Thumbs.db
+
+# Local pre-publish guard. Lists terms that must never appear in this public
+# repo. Deliberately NOT committed -- a file enumerating them would itself be
+# the disclosure it exists to prevent. See plugins/second-brain/test/denylist.mjs
+.denylist

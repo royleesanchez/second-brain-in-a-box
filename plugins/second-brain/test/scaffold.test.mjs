@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { scaffoldBrain } from '../bin/scaffold.mjs';
+import { denylistPattern } from './denylist.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const TPL = path.resolve(HERE, '..', 'templates', 'firm-personal');
@@ -94,7 +95,8 @@ test('is idempotent — a second run creates nothing new', () => {
 test('the scaffolded brain contains no confidential identifiers', () => {
   const t = target();
   scaffoldBrain({ templateDir: TPL, targetDir: t, vars: VARS });
-  const banned = /Roylee|BSIP|Blue Star Innovation|OfficeRnD|Hostfully|JerseyWatch/i;
+  const banned = denylistPattern();
+  if (!banned) return;
   for (const f of ['CLAUDE.md', 'index.md', 'log.md']) {
     assert.ok(!banned.test(readFileSync(path.join(t, f), 'utf8')), `${f} leaks an identifier`);
   }

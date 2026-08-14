@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { denylistPattern } from './denylist.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SKILLS = path.resolve(HERE, '..', 'skills');
@@ -32,7 +33,8 @@ test('every required skill exists with valid frontmatter', () => {
 });
 
 test('no skill leaks a confidential or personal identifier', () => {
-  const banned = /Roylee|BSIP|Blue Star Innovation|OfficeRnD|Hostfully|JerseyWatch|Byga|Alleva|CloudLex|IntusCare/i;
+  const banned = denylistPattern();
+  if (!banned) return; // no local denylist configured
   for (const s of readdirSync(SKILLS)) {
     const file = path.join(SKILLS, s, 'SKILL.md');
     if (!existsSync(file)) continue;

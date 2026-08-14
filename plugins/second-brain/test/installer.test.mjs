@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { denylistPattern } from './denylist.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const BOOT = path.join(path.resolve(HERE, '..', '..', '..'), 'bootstrap');
@@ -74,9 +75,10 @@ test('installers default every automation to off', () => {
 });
 
 test('no installer contains a hardcoded personal path or identifier', () => {
+  const banned = denylistPattern();
   for (const f of ['install.sh', 'install.ps1', 'START HERE.cmd']) {
     const text = readFileSync(path.join(BOOT, f), 'utf8');
-    assert.ok(!/Roylee|BSIP|Blue Star/i.test(text), `${f} leaks an identifier`);
+    if (banned) assert.ok(!banned.test(text), `${f} leaks an identifier`);
     assert.ok(!/C:\\Users\\[A-Za-z]/.test(text), `${f} has a hardcoded user path`);
   }
 });

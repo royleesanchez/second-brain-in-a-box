@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { denylistPattern } from './denylist.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..', '..', '..');
@@ -103,7 +104,8 @@ test('the IT one-pager states the security posture plainly', () => {
 
 test('no bootstrap file carries a hardcoded personal path', () => {
   for (const f of ['lib/preflight.sh', 'lib/preflight.ps1', 'IT-REQUIREMENTS.md']) {
+    const banned = denylistPattern();
     const text = readFileSync(path.join(BOOT, f), 'utf8');
-    assert.ok(!/Roylee|BSIP|Blue Star/i.test(text), `${f} leaks an identifier`);
+    if (banned) assert.ok(!banned.test(text), `${f} leaks an identifier`);
   }
 });
