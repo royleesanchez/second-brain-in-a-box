@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SKILLS = path.resolve(HERE, '..', 'skills');
 
-const REQUIRED = ['onboard', 'save-point'];
+const REQUIRED = ['onboard', 'save-point', 'capture', 'brief'];
 
 function frontmatter(name) {
   const text = readFileSync(path.join(SKILLS, name, 'SKILL.md'), 'utf8');
@@ -80,4 +80,35 @@ test('save-point covers anchors, map, and the resume line', () => {
 test('save-point does not create standalone files by default', () => {
   const { body } = frontmatter('save-point');
   assert.match(body, /standalone/i);
+});
+
+test('capture covers route targets, cross-linking, and marking sources processed', () => {
+  const { body } = frontmatter('capture');
+  for (const needle of ['00_Inbox', '01_Daily', '03_People', '_processed', '[[', 'index.md', 'log.md']) {
+    assert.ok(body.includes(needle), `capture must cover "${needle}"`);
+  }
+});
+
+test('capture never edits originals and never guesses routing', () => {
+  const { body } = frontmatter('capture');
+  assert.match(body, /never edit|do not edit|immutable/i, 'originals must be immutable');
+  assert.match(body, /do not guess|needs-routing/i, 'unconfident routing must not be guessed');
+});
+
+test('brief is slot-based and never fails without connectors', () => {
+  const { body } = frontmatter('brief');
+  const lower = body.toLowerCase();
+  for (const needle of ['never fail', 'vault', 'calendar', 'mail', 'meeting note', 'open item']) {
+    assert.ok(lower.includes(needle), `brief must cover "${needle}"`);
+  }
+});
+
+test('brief is read-only against connectors', () => {
+  const { body } = frontmatter('brief');
+  assert.match(body, /read-only|never send|does not send/i);
+});
+
+test('brief names no specific vendor in its logic', () => {
+  const { body } = frontmatter('brief');
+  assert.match(body, /slot/i, 'brief must be written against slots, not vendors');
 });
