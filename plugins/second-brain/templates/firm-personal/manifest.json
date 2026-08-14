@@ -1,0 +1,25 @@
+{
+  "name": "firm-personal",
+  "label": "Personal brain — investment professional / operating partner",
+  "dirs": [
+    "00_Inbox",
+    "00_Inbox/_processed",
+    "01_Daily",
+    "02_Workstreams",
+    "02_Workstreams/PortCo Ops",
+    "02_Workstreams/Diligence Pipeline",
+    "02_Workstreams/Firm Internal",
+    "03_People",
+    "04_Intelligence & Learning",
+    "05_Resources & Templates",
+    "06_Archive",
+    ".brain"
+  ],
+  "files": [
+    { "from": "CLAUDE.md.tpl", "to": "CLAUDE.md" },
+    { "from": "index.md.tpl", "to": "index.md" },
+    { "from": "log.md.tpl", "to": "log.md" },
+    { "from": "MEMORY.md.tpl", "to": ".brain/MEMORY.seed.md" },
+    { "from": "brain.config.json.tpl", "to": ".brain/config.json" }
+  ]
+}
