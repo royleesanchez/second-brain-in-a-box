@@ -5,11 +5,19 @@
 *.sh            text eol=lf
 install.sh      text eol=lf
 
-# Extensionless hook scripts (bash, invoked via run-hook.cmd)
-hooks/session-start        text eol=lf
-hooks/user-prompt-submit   text eol=lf
-hooks/pre-compact          text eol=lf
-hooks/session-end          text eol=lf
+# Extensionless hook scripts (bash, invoked via run-hook.cmd).
+#
+# The `**/` prefix is REQUIRED and not decorative. A gitattributes pattern
+# containing a slash is anchored to the directory holding .gitattributes, so
+# `hooks/session-start` matches only <root>/hooks/session-start -- never
+# plugins/second-brain/hooks/session-start, which is where these actually
+# live. Without the prefix the rule silently does not apply, the files come
+# back CRLF after a clone, and every one of them fails on macOS with
+# "$'\r': command not found".
+**/hooks/session-start        text eol=lf
+**/hooks/user-prompt-submit   text eol=lf
+**/hooks/pre-compact          text eol=lf
+**/hooks/session-end          text eol=lf
 
 # The polyglot wrapper is parsed by BOTH cmd.exe and bash. cmd.exe tolerates
 # LF, bash does not tolerate CRLF, so LF is the only setting that works.
