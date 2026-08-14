@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SKILLS = path.resolve(HERE, '..', 'skills');
 
-const REQUIRED = ['onboard', 'save-point', 'capture', 'brief'];
+const REQUIRED = ['onboard', 'save-point', 'capture', 'brief', 'connect', 'os-audit', 'sync'];
 
 function frontmatter(name) {
   const text = readFileSync(path.join(SKILLS, name, 'SKILL.md'), 'utf8');
@@ -111,4 +111,56 @@ test('brief is read-only against connectors', () => {
 test('brief names no specific vendor in its logic', () => {
   const { body } = frontmatter('brief');
   assert.match(body, /slot/i, 'brief must be written against slots, not vendors');
+});
+
+test('connect verifies rather than assumes, and records what is live', () => {
+  const { body } = frontmatter('connect');
+  const lower = body.toLowerCase();
+  for (const needle of ['verify', '.brain/config.json', 'read-only', 'cannot install']) {
+    assert.ok(lower.includes(needle.toLowerCase()), `connect must cover "${needle}"`);
+  }
+});
+
+test('connect supports both major provider families', () => {
+  const { body } = frontmatter('connect');
+  assert.match(body, /google/i);
+  assert.match(body, /microsoft/i);
+});
+
+test('connect never marks a slot live without a successful read', () => {
+  const { body } = frontmatter('connect');
+  assert.match(body, /not mark.*live|never.*optimistic|without a successful read/i);
+});
+
+test('os-audit is read-only and scores the six rows', () => {
+  const { body } = frontmatter('os-audit');
+  for (const needle of ['Routing', 'Index Truth', 'Freshness', 'Bloat', 'Hygiene', 'Context Placement']) {
+    assert.ok(body.includes(needle), `os-audit must score "${needle}"`);
+  }
+  assert.match(body, /read-only/i);
+  assert.match(body, /never edit|applies none|apply none/i);
+});
+
+test('os-audit names the four failure modes it defends against', () => {
+  const { body } = frontmatter('os-audit');
+  const lower = body.toLowerCase();
+  for (const mode of ['poison', 'bloat', 'confusion', 'clash']) {
+    assert.ok(lower.includes(mode), `os-audit must name the "${mode}" failure mode`);
+  }
+});
+
+test('sync handles both git and no-git modes', () => {
+  const { body } = frontmatter('sync');
+  const lower = body.toLowerCase();
+  for (const needle of ['pull', 'commit', 'push', 'conflict']) {
+    assert.ok(lower.includes(needle), `sync must cover "${needle}"`);
+  }
+  assert.match(body, /shared[- ]drive/i, 'sync must cover the shared-drive fallback mode');
+  assert.match(body, /git mode/i, 'sync must cover git mode');
+});
+
+test('sync never force-pushes or discards work', () => {
+  const { body } = frontmatter('sync');
+  assert.match(body, /never force-push|no force-push/i);
+  assert.match(body, /never.*discard|do not.*discard/i);
 });
