@@ -21,21 +21,28 @@ Everything else — Node, Git, VS Code, Claude Code, Obsidian — the installer 
 
 ## Install
 
+Download **[Second-Brain-in-a-Box.zip](https://github.com/royleesanchez/second-brain-in-a-box/releases/latest/download/Second-Brain-in-a-Box.zip)** from the latest release.
+
 ### Windows
 
-1. Download and unzip.
+1. Right-click the zip → **Extract All**.
 2. Double-click **`START HERE.cmd`**.
+
+If Windows shows a blue "protected your PC" banner, click **More info → Run anyway**. That appears for any downloaded script that isn't code-signed.
 
 ### macOS
 
-1. Download and unzip.
-2. Open Terminal and paste:
+1. Double-click the zip. It expands into a **`Second-Brain-in-a-Box`** folder.
+2. Open **Terminal** (⌘-Space, type "Terminal").
+3. Type `bash ` — with a trailing space — then **drag `install.sh` from Finder into the Terminal window** and press Return.
+
+Dragging the file avoids typing any path. If you'd rather type it:
 
 ```bash
-bash ~/Downloads/second-brain-in-a-box/install.sh
+bash ~/Downloads/Second-Brain-in-a-Box/install.sh
 ```
 
-*(macOS quarantines downloaded files, so a double-clickable script gets blocked with a scary warning. One pasted line is more reliable and less alarming.)*
+*(macOS quarantines downloaded files, so a double-clickable script gets blocked with a scary warning. Running it through Terminal avoids that entirely.)*
 
 Want to see what it will do first? Add `--dry-run` (macOS) or `-DryRun` (Windows). It prints the plan and changes nothing.
 
