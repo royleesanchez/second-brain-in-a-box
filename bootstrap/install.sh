@@ -11,7 +11,7 @@
 set -uo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
-MARKETPLACE_URL="${SECOND_BRAIN_MARKETPLACE:-https://github.com/REPLACE_ME_ORG/second-brain-in-a-box}"
+MARKETPLACE_URL="${SECOND_BRAIN_MARKETPLACE:-https://github.com/royleesanchez/second-brain-in-a-box}"
 DRY_RUN=false
 [ "${1:-}" = "--dry-run" ] && DRY_RUN=true
 

@@ -143,4 +143,4 @@ See [`bootstrap/IT-REQUIREMENTS.md`](bootstrap/IT-REQUIREMENTS.md) — one page 
 
 MIT. Use it, fork it, adapt the schema to your own work.
 
-*Marketplace: `https://github.com/REPLACE_ME_ORG/second-brain-in-a-box`*
+*Marketplace: `https://github.com/royleesanchez/second-brain-in-a-box`*

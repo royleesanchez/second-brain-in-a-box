@@ -19,7 +19,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 $marketplaceUrl = $env:SECOND_BRAIN_MARKETPLACE
 if ([string]::IsNullOrWhiteSpace($marketplaceUrl)) {
-    $marketplaceUrl = 'https://github.com/REPLACE_ME_ORG/second-brain-in-a-box'
+    $marketplaceUrl = 'https://github.com/royleesanchez/second-brain-in-a-box'
 }
 
 function Say  { param([string] $m) Write-Host ''; Write-Host $m -ForegroundColor Cyan }
