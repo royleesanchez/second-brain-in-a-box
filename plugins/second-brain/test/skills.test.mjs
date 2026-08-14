@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SKILLS = path.resolve(HERE, '..', 'skills');
 
-const REQUIRED = ['onboard', 'save-point', 'capture', 'brief', 'connect', 'os-audit', 'sync'];
+const REQUIRED = ['onboard', 'save-point', 'capture', 'brief', 'connect', 'os-audit', 'sync', 'cadence'];
 
 function frontmatter(name) {
   const text = readFileSync(path.join(SKILLS, name, 'SKILL.md'), 'utf8');
@@ -157,6 +157,21 @@ test('sync handles both git and no-git modes', () => {
   }
   assert.match(body, /shared[- ]drive/i, 'sync must cover the shared-drive fallback mode');
   assert.match(body, /git mode/i, 'sync must cover git mode');
+});
+
+test('cadence ships everything off by default but visible', () => {
+  const { body } = frontmatter('cadence');
+  assert.match(body, /off by default|ships \*\*off\*\*|default.*off/i, 'must state automations default to off');
+  const lower = body.toLowerCase();
+  for (const needle of ['daily brief', 'os-audit', 'inbox capture', 'earned']) {
+    assert.ok(lower.includes(needle), `cadence must cover "${needle}"`);
+  }
+});
+
+test('cadence forbids unattended writing or sending', () => {
+  const { body } = frontmatter('cadence');
+  assert.match(body, /human in the loop/i);
+  assert.match(body, /without a human|stay manual|never.*unattended/i);
 });
 
 test('sync never force-pushes or discards work', () => {
